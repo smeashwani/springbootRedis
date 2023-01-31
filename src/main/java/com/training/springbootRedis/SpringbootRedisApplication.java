@@ -1,5 +1,7 @@
 package com.training.springbootRedis;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -26,6 +28,9 @@ public class SpringbootRedisApplication implements CommandLineRunner{
 		Student stu2 = new Student("2", "STU_2", Student.Gender.FEMALE, 2);
 		studentService.save(stu2);
 		
+		Student stu3 = new Student("3", "STU_3", Student.Gender.FEMALE, 3);
+		studentService.save(stu3);
+		
 		Student find = studentService.find("2");
 		System.out.println(find);
 		
@@ -39,7 +44,11 @@ public class SpringbootRedisApplication implements CommandLineRunner{
 		
 		find = studentService.find("1");
 		System.out.println(find);
-		
+		System.out.println("=============FIND ALL=======");
+		Map<String, Object> findAll = studentService.findAll();
+		findAll.forEach( (k,v) -> {
+			System.out.println("KEY: "+ k + " Value: "+v);
+		});
 	}
 
 }
