@@ -1,35 +1,29 @@
 package com.training.springbootRedis.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.training.springbootRedis.model.Student;
-import com.training.springbootRedis.repo.StudentRepository;
 
 @Service
 public class StudentService {
 	
 	@Autowired
-	StudentRepository studentRepository;
+	private RedisTemplate<String, Object> redisTemplate;
 	
 	public void save(Student student) {
-		studentRepository.save(student);
+		 redisTemplate.opsForValue().set(student.getId(), student);
 	}
 	
 	public Student find(String id) {
-		return studentRepository.findById(id).get();
+		return (Student)redisTemplate.opsForValue().get(id);
 	}
 	
 	
 	
 	public void delete(String id) {
-		studentRepository.deleteById(id);
+		redisTemplate.delete(id);
 	}
 	
-	public List<Student> findAll() {
-		return (List<Student>) studentRepository.findAll();	
-	}
-
 }

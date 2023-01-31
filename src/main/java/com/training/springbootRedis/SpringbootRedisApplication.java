@@ -1,8 +1,5 @@
 package com.training.springbootRedis;
 
-import java.util.List;
-//$ docker run -p 16379:6379 -d redis:6.0 redis-server --requirepass "mypass"
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -29,16 +26,20 @@ public class SpringbootRedisApplication implements CommandLineRunner{
 		Student stu2 = new Student("2", "STU_2", Student.Gender.FEMALE, 2);
 		studentService.save(stu2);
 		
-		List<Student> findAll = studentService.findAll();
-		System.out.println(findAll);
+		Student find = studentService.find("2");
+		System.out.println(find);
 		
 		studentService.delete("2");
+		
+		find = studentService.find("2");
+		System.out.println(find);
 		
 		stu1.setGrade(20);
 		studentService.save(stu1);
 		
-		findAll = studentService.findAll();
-		System.out.println(findAll);
+		find = studentService.find("1");
+		System.out.println(find);
+		
 	}
 
 }
