@@ -19,20 +19,20 @@ public class StudentService {
 	
 	public static HashMap<String, Object> map = new HashMap<>();
 	
-	@CachePut(value = "students", key = "#student.id")
+	@CachePut(value = "studentsCache", key = "#student.id")
 	public Student save(Student student) {
 		log.info("saving student" + student);
 		map.put(student.getId(), student);
 		return student;
 	}
 	
-	@Cacheable(value="students", key="#id")
+	@Cacheable(value="studentsCache", key="#id")
 	public Student find(String id) {
 		log.info("find student id" + id);
 		return (Student)map.get(id);
 	}
 	
-	@CacheEvict(value = "students",  key = "#id")
+	@CacheEvict(value = "studentsCache",  key = "#id")
 	public void delete(String id) {
 		log.info("delete student id" + id);
 		map.remove(id);
