@@ -1,37 +1,45 @@
 package com.training.springbootRedis.service;
 
-import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
 
-import javax.annotation.Resource;
-
-import org.springframework.data.redis.core.HashOperations;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.training.springbootRedis.model.Student;
 
+import lombok.extern.log4j.Log4j2;
+
+
 @Service
+@Log4j2
 public class StudentService {
 	
-	private final String hashReference= "Student";
+	public static HashMap<String, Object> map = new HashMap<>();
 	
-	
-	@Resource(name="redisTemplate")
-	private HashOperations<String, String, Object> hashOperations;
-	
-	public void save(Student student) {
-		hashOperations.put(hashReference, student.getId(), student);
+	@CachePut(value = "students", key = "#student.id")
+	public Student save(Student student) {
+		log.info("saving student" + student);
+		map.put(student.getId(), student);
+		return student;
 	}
 	
+	@Cacheable(value="students", key="#id")
 	public Student find(String id) {
-		return (Student)hashOperations.get(hashReference, id);
+		log.info("find student id" + id);
+		return (Student)map.get(id);
 	}
 	
+	@CacheEvict(value = "students",  key = "#id")
 	public void delete(String id) {
-		hashOperations.delete(hashReference, id);
+		log.info("delete student id" + id);
+		map.remove(id);
 	}
 	
-    public Map<String, Object> findAll() {
-       return hashOperations.entries(hashReference);
+    public List<Student> findAll() {
+    	return null;
     }
 	
 }
