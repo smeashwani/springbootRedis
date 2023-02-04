@@ -20,10 +20,7 @@ public class StudentService {
 		return (Student)redisTemplate.opsForValue().get(id);
 	}
 	
-	
-	
 	public void delete(String id) {
 		redisTemplate.delete(id);
 	}
-	
 }
